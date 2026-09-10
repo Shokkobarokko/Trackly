@@ -2,19 +2,26 @@ import UIKit
 
 final class HabitsViewController: UIViewController {
     
+    //MARK: - Properties
+    
+    
     private let viewModel = HabitsViewModel()
     private let tableView = UITableView()
+    
+    //MARK: - Lifecycle
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
-        viewModel.addHabit(text: "Кушать")
-        viewModel.addHabit(text: "Гулять")
         setupNavigationBar()
     }
     
     
 }
+
+//MARK: - Setup
+
 
 private extension HabitsViewController {
     func setupTableView() {
@@ -35,10 +42,29 @@ private extension HabitsViewController {
     
     @objc func addButtonTapped() {
         let alert = UIAlertController(title: "Новая привычка", message: nil, preferredStyle: .alert)
+        alert.addTextField { textField in
+            textField.placeholder = "Название привычки"
+            
+        }
+        
+        let addAction = UIAlertAction(
+            title: "Добавить",
+            style: .default,
+            handler: { action in
+                if let text = alert.textFields?.first?.text {
+                    self.viewModel.addHabit(text: text)
+                    self.tableView.reloadData()
+                }
+            }
+        )
+        alert.addAction(addAction)
+        present(alert, animated: true, completion: nil)
     }
 }
 
 //MARK: UITableViewDataSource
+
+
 extension HabitsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         viewModel.habits.count
@@ -53,11 +79,15 @@ extension HabitsViewController: UITableViewDataSource {
 }
 
 //MARK: UITableViewDelegate
+
+
 extension HabitsViewController: UITableViewDelegate {
     
 }
 
 //MARK: NavigationBar
+
+
 extension HabitsViewController {
     func setupNavigationBar() {
         let addButton = UIBarButtonItem(
