@@ -2,14 +2,16 @@ import Foundation
 
 final class HabitsViewModel {
     
-    private(set) var habits: [Habit] = []
+    var habits: [Habit] = []
+    
+    var onHabitsChanged: (() -> Void)?
     
     
 }
 
 extension HabitsViewModel {
-    func addHabit(text habitText: String) {
-        let habit = Habit(text: habitText)
-        habits.append(habit)
+    func addHabit(text: String) {
+        habits.append(Habit(text: text))
+        onHabitsChanged?()
     }
 }

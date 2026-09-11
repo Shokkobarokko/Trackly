@@ -15,6 +15,10 @@ final class HabitsViewController: UIViewController {
         super.viewDidLoad()
         setupTableView()
         setupNavigationBar()
+        
+        viewModel.onHabitsChanged = { [weak self] in
+            self?.tableView.reloadData()
+        }
     }
     
     
@@ -53,7 +57,6 @@ private extension HabitsViewController {
             handler: { action in
                 if let text = alert.textFields?.first?.text {
                     self.viewModel.addHabit(text: text)
-                    self.tableView.reloadData()
                 }
             }
         )
