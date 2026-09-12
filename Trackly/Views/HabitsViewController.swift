@@ -41,9 +41,10 @@ private extension HabitsViewController {
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "HabitCell")
         tableView.dataSource = self
-        tableView.delegate = self
+        
     }
     
+    //MARK: - Actions
     @objc func addButtonTapped() {
         let alert = UIAlertController(title: "Новая привычка", message: nil, preferredStyle: .alert)
         alert.addTextField { textField in
@@ -81,12 +82,6 @@ extension HabitsViewController: UITableViewDataSource {
     }
 }
 
-//MARK: UITableViewDelegate
-
-
-extension HabitsViewController: UITableViewDelegate {
-    
-}
 
 //MARK: NavigationBar
 

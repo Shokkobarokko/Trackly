@@ -2,7 +2,7 @@ import Foundation
 
 final class HabitsViewModel {
     
-    var habits: [Habit] = []
+    private(set) var habits: [Habit] = []
     
     var onHabitsChanged: (() -> Void)?
     
@@ -11,7 +11,14 @@ final class HabitsViewModel {
 
 extension HabitsViewModel {
     func addHabit(text: String) {
-        habits.append(Habit(text: text))
+        let trimmedText = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmedText == ""{
+            return
+        }
+        habits.append(Habit(text: trimmedText))
         onHabitsChanged?()
+        print("original:", text)
+        print("count:", text.count)
+        print("unicode:", text.unicodeScalars.map { $0.value })
     }
 }
