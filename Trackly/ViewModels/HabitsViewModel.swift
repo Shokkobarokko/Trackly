@@ -21,4 +21,10 @@ extension HabitsViewModel {
         print("count:", text.count)
         print("unicode:", text.unicodeScalars.map { $0.value })
     }
+    
+    func deleteHabit(at index: Int) {
+        habits.remove(at: index)
+        onHabitsChanged?()
+        
+    }
 }
