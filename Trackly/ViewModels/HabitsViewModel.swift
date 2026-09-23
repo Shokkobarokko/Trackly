@@ -6,24 +6,25 @@ final class HabitsViewModel {
     
     var onHabitsChanged: (() -> Void)?
     
-    
+    init() {
+        habits = HabitsStorage.load()
+    }
 }
 
 extension HabitsViewModel {
     func addHabit(text: String) {
         let trimmedText = text.trimmingCharacters(in: .whitespacesAndNewlines)
-        if trimmedText == ""{
+        if trimmedText == "" {
             return
         }
         habits.append(Habit(text: trimmedText))
+        HabitsStorage.save(habits)
         onHabitsChanged?()
-        print("original:", text)
-        print("count:", text.count)
-        print("unicode:", text.unicodeScalars.map { $0.value })
     }
     
     func deleteHabit(at index: Int) {
         habits.remove(at: index)
+        HabitsStorage.save(habits)
         onHabitsChanged?()
         
     }
