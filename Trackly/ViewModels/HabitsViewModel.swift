@@ -8,6 +8,7 @@ final class HabitsViewModel {
     
     init() {
         habits = HabitsStorage.load()
+        print(habits.map { ( $0.text, $0.id, $0.createdDate)})
     }
 }
 
@@ -24,8 +25,8 @@ extension HabitsViewModel {
     
     func deleteHabit(at index: Int) {
         habits.remove(at: index)
+        print("Before save:", habits.map { $0.text })
         HabitsStorage.save(habits)
         onHabitsChanged?()
-        
     }
 }
