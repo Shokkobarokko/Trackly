@@ -15,7 +15,7 @@ final class HabitsViewController: UIViewController {
         super.viewDidLoad()
         setupTableView()
         setupNavigationBar()
-        
+
         viewModel.onHabitsChanged = { [weak self] in
             self?.tableView.reloadData()
         }
