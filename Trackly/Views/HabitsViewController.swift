@@ -41,6 +41,7 @@ private extension HabitsViewController {
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "HabitCell")
         tableView.dataSource = self
+        tableView.delegate = self
         
     }
     
@@ -95,6 +96,29 @@ extension HabitsViewController: UITableViewDelegate {
             }
             
         }
+    
+    func tableView(
+        _ tableView: UITableView,
+        didSelectRowAt indexPath: IndexPath
+    ) {
+        let habit = viewModel.habits[indexPath.row]
+        let alert = UIAlertController(title:"Обновить", message: nil, preferredStyle: .alert)
+        alert.addTextField { textField in
+            textField.text = habit.text
+        }
+        let saveAction = UIAlertAction(
+            title: "Сохранить",
+            style: .default,
+            handler: { action in
+                if let text = alert.textFields?.first?.text {
+                    self.viewModel.updateHabit(at: indexPath.row, text: text)
+                }
+            }
+        )
+        alert.addAction(saveAction)
+        present(alert,animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
     
 }
 
