@@ -2,6 +2,7 @@ import Foundation
 
 enum HabitCompletionStorage {
     private static let key = "habitCompletions"
+    
     static func save(_ completions: Set<HabitCompletion>) {
         let encoder = JSONEncoder()
         let data = try? encoder.encode(completions)

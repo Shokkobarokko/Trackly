@@ -15,7 +15,6 @@ final class HabitsViewController: UIViewController {
         super.viewDidLoad()
         setupTableView()
         setupNavigationBar()
-
         viewModel.onHabitsChanged = { [weak self] in
             self?.tableView.reloadData()
         }
@@ -79,6 +78,7 @@ extension HabitsViewController: UITableViewDataSource {
         let habit = viewModel.habits[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "HabitCell", for: indexPath)
         cell.textLabel?.text = habit.text
+        cell.accessoryType = .detailButton
         return cell
     }
 }
@@ -118,6 +118,15 @@ extension HabitsViewController: UITableViewDelegate {
         alert.addAction(saveAction)
         present(alert,animated: true)
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    func tableView(
+        _ tableView: UITableView,
+        accessoryButtonTappedForRowWith indexPath: IndexPath
+    ) {
+        let habit = viewModel.habits[indexPath.row]
+        viewModel.completeHabit(habit: habit.id, date: Date())
+        print("Completed:", habit.text)
     }
     
 }

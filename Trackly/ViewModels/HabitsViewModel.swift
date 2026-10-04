@@ -46,4 +46,11 @@ extension HabitsViewModel {
             completion.habitID == habit && completion.date == Calendar.current.startOfDay(for: date)
         }
     }
+    
+    func completeHabit(habit: UUID, date: Date) {
+        let completion = HabitCompletion(habitID: habit, date: date)
+        completions.insert(completion)
+        HabitCompletionStorage.save(completions)
+    }
+    
 }
