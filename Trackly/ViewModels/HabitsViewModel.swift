@@ -48,9 +48,15 @@ extension HabitsViewModel {
     }
     
     func completeHabit(habit: UUID, date: Date) {
-        let completion = HabitCompletion(habitID: habit, date: date)
-        completions.insert(completion)
+        if isCompleted(habit: habit, date: date) {
+            let completion = HabitCompletion(habitID: habit, date: date)
+            completions.remove(completion)
+        } else {
+            let completion = HabitCompletion(habitID: habit, date: date)
+            completions.insert(completion)
+        }
         HabitCompletionStorage.save(completions)
+        onHabitsChanged?()
     }
     
 }

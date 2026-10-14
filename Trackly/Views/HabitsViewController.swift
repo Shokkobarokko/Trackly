@@ -78,7 +78,11 @@ extension HabitsViewController: UITableViewDataSource {
         let habit = viewModel.habits[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "HabitCell", for: indexPath)
         cell.textLabel?.text = habit.text
-        cell.accessoryType = .detailButton
+        if viewModel.isCompleted(habit: habit.id, date: Date()) {
+            cell.accessoryType = .checkmark
+        } else {
+            cell.accessoryType = .none
+        }
         return cell
     }
 }
@@ -101,22 +105,25 @@ extension HabitsViewController: UITableViewDelegate {
         _ tableView: UITableView,
         didSelectRowAt indexPath: IndexPath
     ) {
+//        let habit = viewModel.habits[indexPath.row]
+//        let alert = UIAlertController(title:"Обновить", message: nil, preferredStyle: .alert)
+//        alert.addTextField { textField in
+//            textField.text = habit.text
+//        }
+//        let saveAction = UIAlertAction(
+//            title: "Сохранить",
+//            style: .default,
+//            handler: { action in
+//                if let text = alert.textFields?.first?.text {
+//                    self.viewModel.updateHabit(at: indexPath.row, text: text)
+//                }
+//            }
+//        )
+//        alert.addAction(saveAction)
+//        present(alert,animated: true)
+//        tableView.deselectRow(at: indexPath, animated: true)
         let habit = viewModel.habits[indexPath.row]
-        let alert = UIAlertController(title:"Обновить", message: nil, preferredStyle: .alert)
-        alert.addTextField { textField in
-            textField.text = habit.text
-        }
-        let saveAction = UIAlertAction(
-            title: "Сохранить",
-            style: .default,
-            handler: { action in
-                if let text = alert.textFields?.first?.text {
-                    self.viewModel.updateHabit(at: indexPath.row, text: text)
-                }
-            }
-        )
-        alert.addAction(saveAction)
-        present(alert,animated: true)
+        viewModel.completeHabit(habit: habit.id, date: Date())
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
