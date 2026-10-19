@@ -79,7 +79,7 @@ extension HabitsViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "HabitCell", for: indexPath)
         cell.textLabel?.text = habit.text
         if viewModel.isCompleted(habit: habit.id, date: Date()) {
-            cell.accessoryType = .checkmark
+            cell.accessoryType = .detailButton
         } else {
             cell.accessoryType = .none
         }
@@ -132,8 +132,27 @@ extension HabitsViewController: UITableViewDelegate {
         accessoryButtonTappedForRowWith indexPath: IndexPath
     ) {
         let habit = viewModel.habits[indexPath.row]
-        viewModel.completeHabit(habit: habit.id, date: Date())
-        print("Completed:", habit.text)
+        
+        let alert = UIAlertController(
+            title: "Обновить",
+            message: nil,
+            preferredStyle: .alert
+        )
+        alert.addTextField { textField in
+            textField.text = habit.text
+        }
+        let saveAction = UIAlertAction(
+            title: "Сохранить",
+            style: .default,
+            handler: { action in
+                if let text = alert.textFields?.first?.text {
+                    self.viewModel.updateHabit(at: indexPath.row, text: text)
+                }
+            }
+        )
+        alert.addAction(saveAction)
+        present(alert, animated: true)
+
     }
     
 }
