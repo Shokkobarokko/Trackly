@@ -25,11 +25,15 @@ extension HabitsViewModel {
     }
     
     func deleteHabit(at index: Int) {
-        habits.remove(at: index)
-        print("Before save:", habits.map { $0.text })
-        HabitsStorage.save(habits)
-        onHabitsChanged?()
-    }
+        guard index >= 0 && index < habits.count else {
+            return
+        }
+            habits.remove(at: index)
+            HabitsStorage.save(habits)
+            onHabitsChanged?()
+        }
+        
+    
     
     func updateHabit(at index: Int, text: String) {
         let trimmedText = text.trimmingCharacters(in: .whitespacesAndNewlines)

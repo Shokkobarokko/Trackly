@@ -7,7 +7,7 @@ enum HabitsStorage {
         let encoder = JSONEncoder()
         let data = try? encoder.encode(habits)
         UserDefaults.standard.set(data, forKey: key)
-        print("Encoded date:", data as Any)
+
     }
     
     static func load() -> [Habit] {
