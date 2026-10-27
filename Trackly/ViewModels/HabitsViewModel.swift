@@ -36,6 +36,9 @@ extension HabitsViewModel {
     
     
     func updateHabit(at index: Int, text: String) {
+        guard index >= 0 && index < habits.count else {
+            return
+        }
         let trimmedText = text.trimmingCharacters(in: .whitespacesAndNewlines)
         if trimmedText == "" {
             return
