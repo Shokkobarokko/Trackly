@@ -28,9 +28,14 @@ extension HabitsViewModel {
         guard index >= 0 && index < habits.count else {
             return
         }
-            habits.remove(at: index)
-            HabitsStorage.save(habits)
-            onHabitsChanged?()
+        let habit = habits[index]
+        completions = completions.filter { completion in
+            completion.habitID != habit.id
+        }
+        habits.remove(at: index)
+        HabitsStorage.save(habits)
+        HabitCompletionStorage.save(completions)
+        onHabitsChanged?()
         }
         
     

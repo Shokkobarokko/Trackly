@@ -25,7 +25,8 @@ enum HabitsStorage {
             let habits = try decoder.decode([Habit].self, from: data)
             return habits
         } catch {
-            return []
+            print(error)
+            return[]
         }
     }
 }
