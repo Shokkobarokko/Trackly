@@ -5,8 +5,14 @@ enum HabitsStorage {
     
     static func save(_ habits: [Habit]) {
         let encoder = JSONEncoder()
-        let data = try? encoder.encode(habits)
-        UserDefaults.standard.set(data, forKey: key)
+        do {
+            let data = try encoder.encode(habits)
+            UserDefaults.standard.set(data, forKey: key)
+        } catch {
+            print(error)
+        }
+        
+        
 
     }
     
