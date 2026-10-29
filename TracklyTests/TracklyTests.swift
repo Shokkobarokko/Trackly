@@ -54,7 +54,23 @@ struct TracklyTests {
         habitsViewModel.deleteHabit(at: indexHabit)
         #expect(habitsViewModel.habits.count == currentHabits - 1)
         #expect(!habitsViewModel.isCompleted(habit: habitID, date: Date()))
-        
+    }
+    
+    @Test func testDeleteHabitWithInvalidIndexDoesNothing() async throws {
+        let habitsViewModel = HabitsViewModel()
+        habitsViewModel.addHabit(text: "Read a book")
+        let currentHabits = habitsViewModel.habits.count
+        habitsViewModel.deleteHabit(at: -1)
+        #expect(habitsViewModel.habits.count == currentHabits)
+    }
+    
+    @Test func testUpdateHabitWithInvalidIndexDoesNothing() async throws {
+        let habitsViewModel = HabitsViewModel()
+        habitsViewModel.addHabit(text: "Read a book")
+        let habitID = habitsViewModel.habits.last!.id
+        habitsViewModel.updateHabit(at: -1, text: "Go running")
+        let habit = habitsViewModel.habits.first(where: { $0.id == habitID })
+        #expect(habit?.text == "Read a book")
     }
     
 }
