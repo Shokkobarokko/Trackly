@@ -60,6 +60,9 @@ extension HabitsViewModel {
     }
     
     func completeHabit(habit: UUID, date: Date) {
+        guard habits.contains(where: { $0.id == habit }) else {
+            return
+        }
         if isCompleted(habit: habit, date: date) {
             let completion = HabitCompletion(habitID: habit, date: date)
             completions.remove(completion)
