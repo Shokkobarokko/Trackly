@@ -73,4 +73,13 @@ struct TracklyTests {
         #expect(habit?.text == "Read a book")
     }
     
+    @Test func testHabitCanBeCompleted() async throws {
+        let habitsViewModel = HabitsViewModel()
+        habitsViewModel.addHabit(text: "Read a book")
+        let habitID = habitsViewModel.habits.last!.id
+        let today = Date()
+        habitsViewModel.completeHabit(habit: habitID, date: today)
+        #expect(habitsViewModel.isCompleted(habit: habitID, date: today))
+    }
+    
 }

@@ -37,11 +37,9 @@ private extension HabitsViewController {
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
-        
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "HabitCell")
         tableView.dataSource = self
         tableView.delegate = self
-        
     }
     
     //MARK: - Actions
@@ -49,7 +47,6 @@ private extension HabitsViewController {
         let alert = UIAlertController(title: "Новая привычка", message: nil, preferredStyle: .alert)
         alert.addTextField { textField in
             textField.placeholder = "Название привычки"
-            
         }
         
         let addAction = UIAlertAction(
@@ -73,7 +70,6 @@ extension HabitsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         viewModel.habits.count
     }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let habit = viewModel.habits[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "HabitCell", for: indexPath)
@@ -98,7 +94,6 @@ extension HabitsViewController: UITableViewDelegate {
             if editingStyle == .delete {
                 viewModel.deleteHabit(at: indexPath.row)
             }
-            
         }
     
     func tableView(
@@ -132,7 +127,6 @@ extension HabitsViewController: UITableViewDelegate {
         accessoryButtonTappedForRowWith indexPath: IndexPath
     ) {
         let habit = viewModel.habits[indexPath.row]
-        
         let alert = UIAlertController(
             title: "Обновить",
             message: nil,
@@ -152,9 +146,7 @@ extension HabitsViewController: UITableViewDelegate {
         )
         alert.addAction(saveAction)
         present(alert, animated: true)
-
     }
-    
 }
 
 
