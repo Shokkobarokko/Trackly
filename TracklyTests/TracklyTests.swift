@@ -82,4 +82,39 @@ struct TracklyTests {
         #expect(habitsViewModel.isCompleted(habit: habitID, date: today))
     }
     
+    @Test func testHabitCanBeUncompleted() async throws {
+        let habitsViewModel = HabitsViewModel()
+        habitsViewModel.addHabit(text: "Read a book")
+        let habitID = habitsViewModel.habits.last!.id
+        let today = Date()
+        habitsViewModel.completeHabit(habit: habitID, date: today)
+        habitsViewModel.completeHabit(habit: habitID, date: today)
+        #expect(habitsViewModel.isCompleted(habit: habitID, date: today) == false)
+    }
+    
+    @Test func testUnknownHabitCannotBeCompleted() async throws {
+        let habitsViewModel = HabitsViewModel()
+        let id = UUID()
+        let today = Date()
+        habitsViewModel.completeHabit(habit: id, date: today)
+        #expect(habitsViewModel.isCompleted(habit: id, date: today) == false)
+    }
+    
+    @Test func testHabitTextIsTrimmed() async throws {
+        let habitsViewModel = HabitsViewModel()
+        habitsViewModel.addHabit(text: "   Read a book   ")
+        let habitID = habitsViewModel.habits.last!.id
+        let habit = habitsViewModel.habits.first(where: { $0.id == habitID})
+        #expect(habit?.text == "Read a book")
+    }
+    
+    @Test func testUpdatedHabitTextIsTrimmed() async throws {
+        let habitsViewModel = HabitsViewModel()
+        habitsViewModel.addHabit(text: "Read a book")
+        let index = habitsViewModel.habits.count-1
+        let habitID = habitsViewModel.habits.last!.id
+        habitsViewModel.updateHabit(at: index, text: "   Read every day   ")
+        let habit = habitsViewModel.habits.first(where: { $0.id == habitID})
+        #expect(habit?.text == "Read every day")
+    }
 }
