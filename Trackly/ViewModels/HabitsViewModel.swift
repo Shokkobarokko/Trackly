@@ -71,7 +71,7 @@ extension HabitsViewModel {
             completions.insert(completion)
         }
         HabitCompletionStorage.save(completions)
-        onHabitsChanged?()
+
     }
     
 }

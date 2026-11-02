@@ -50,26 +50,7 @@ final class HabitsViewController: UIViewController {
         
     }
     
-    private func setupCardView(_ cardView: UIView, in contentView: UIView) {
-        cardView.backgroundColor = .white
-        cardView.layer.cornerRadius = 16
-        cardView.layer.masksToBounds = true
-        
-        contentView.addSubview(cardView)
-        contentView.sendSubviewToBack(cardView)
-        cardView.translatesAutoresizingMaskIntoConstraints = false
-        
-        
-        NSLayoutConstraint.activate([
-            cardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            cardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            cardView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 6),
-            cardView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -6)
-            
-        ])
-        
-        
-    }
+    
     
     
     
@@ -90,7 +71,7 @@ private extension HabitsViewController {
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "HabitCell")
+        tableView.register(HabitCell.self, forCellReuseIdentifier: "HabitCell")
         tableView.dataSource = self
         tableView.delegate = self
         tableView.separatorStyle = .none
@@ -103,28 +84,7 @@ private extension HabitsViewController {
         )
     }
     
-    func setupCheckMarkView(_ checkMarkView: UIView, in cardView: UIView) {
-        
-     
-        checkMarkView.layer.cornerRadius = 12
-        checkMarkView.layer.borderWidth = 1.5
-        checkMarkView.layer.borderColor = UIColor(
-            red: 168.0 / 255.0,
-            green: 185.0 / 255.0,
-            blue: 154.0 / 255.0,
-            alpha: 1
-        ).cgColor
-        
-        checkMarkView.translatesAutoresizingMaskIntoConstraints = false
-        cardView.addSubview(checkMarkView)
-        
-        NSLayoutConstraint.activate([
-            checkMarkView.widthAnchor.constraint(equalToConstant: 24),
-            checkMarkView.heightAnchor.constraint(equalToConstant: 24),
-            checkMarkView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -16),
-            checkMarkView.centerYAnchor.constraint(equalTo: cardView.centerYAnchor)
-        ])
-    }
+    
     
     //MARK: - Actions
     @objc func addButtonTapped() {
@@ -145,18 +105,6 @@ private extension HabitsViewController {
         alert.addAction(addAction)
         present(alert, animated: true, completion: nil)
     }
-    
-    @objc func checkMarkTapped(_ sender: UITapGestureRecognizer) {
-        guard
-            let identifier = sender.view?.accessibilityIdentifier,
-            identifier.hasPrefix("habit-checkmark-"),
-            let habitID = UUID(uuidString: String(identifier.dropFirst("habit-checkmark-".count)))
-        else {
-            return
-        }
-        viewModel.completeHabit(habit: habitID, date: Date())
-        
-    }
 }
 
 
@@ -171,66 +119,31 @@ extension HabitsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let habit = viewModel.habits[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: "HabitCell", for: indexPath)
-        cell.contentView.subviews
-            .filter { $0 is UIView && $0.accessibilityIdentifier != nil }
-            .forEach { $0.removeFromSuperview() }
-        let cardView = UIView()
-        cardView.accessibilityIdentifier = "habit-card"
-        let checkMarkView = UIView()
-        let checkImageView = UIImageView()
-        checkImageView.image = UIImage(systemName: "checkmark")
-        checkImageView.tintColor = .white
-        checkImageView.contentMode = .scaleAspectFit
-        checkImageView.isHidden = true
-        checkMarkView.addSubview(checkImageView)
-        checkImageView.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            checkImageView.centerXAnchor.constraint(equalTo: checkMarkView.centerXAnchor),
-            checkImageView.centerYAnchor.constraint(equalTo: checkMarkView.centerYAnchor),
-            checkImageView.widthAnchor.constraint(equalToConstant: 12),
-            checkImageView.heightAnchor.constraint(equalToConstant: 12)
-        ])
-        setupCardView(cardView, in: cell.contentView)
-        setupCheckMarkView(checkMarkView, in: cardView)
-        let tapGesture = UITapGestureRecognizer(
-            target: self,
-            action: #selector(checkMarkTapped(_:))
-        )
-        
-        checkMarkView.accessibilityIdentifier = "habit-checkmark-\(habit.id.uuidString)"
-        checkMarkView.addGestureRecognizer(tapGesture)
-        checkMarkView.isUserInteractionEnabled = true
-        
-        cell.textLabel?.text = habit.text
-        cell.textLabel?.textColor = UIColor(
-            red: 52.0 / 255.0,
-            green: 66.0 / 255.0,
-            blue: 54.0 / 255.0,
-            alpha: 1
-        )
-        cell.backgroundColor = .clear
-        cell.contentView.backgroundColor = .clear
-        cell.accessoryType = .none
-        
-        if viewModel.isCompleted(habit: habit.id, date: Date()) {
-            checkImageView.isHidden = false
-            checkMarkView.backgroundColor = UIColor(
-                red: 168.0 / 255.0,
-                green: 185.0 / 255.0,
-                blue: 154.0 / 255.0,
-                alpha: 1
-            )
-        } else {
-            checkImageView.isHidden = true
-            checkMarkView.backgroundColor = .clear
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "HabitCell", for: indexPath) as? HabitCell else {
+            return UITableViewCell()
         }
         
+        cell.configure(
+            habit: habit,
+            isCompleted: viewModel.isCompleted(habit: habit.id, date: Date() )
+        )
+        
+        cell.onCheckmarkTapped = { [weak self, weak cell] in
+            guard let self = self, let cell = cell else { return }
+            self.viewModel.completeHabit(habit: habit.id, date: Date())
+            
+            let isCompleted = self.viewModel.isCompleted(
+                habit: habit.id,
+                date: Date()
+            )
+            
+            cell.animateCheckmark(isCompleted: isCompleted)
+        }
         
         
         return cell
     }
+    
 }
 
 //MARK: UITableViewDelegate
