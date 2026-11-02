@@ -50,6 +50,29 @@ final class HabitsViewController: UIViewController {
         
     }
     
+    private func setupCardView(_ cardView: UIView, in contentView: UIView) {
+        cardView.backgroundColor = .white
+        cardView.layer.cornerRadius = 16
+        cardView.layer.masksToBounds = true
+        
+        contentView.addSubview(cardView)
+        contentView.sendSubviewToBack(cardView)
+        cardView.translatesAutoresizingMaskIntoConstraints = false
+        
+        
+        NSLayoutConstraint.activate([
+            cardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            cardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            cardView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 6),
+            cardView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -6)
+            
+        ])
+        
+        
+    }
+    
+    
+    
     
 }
 
@@ -78,6 +101,29 @@ private extension HabitsViewController {
             blue: 242.0 / 255.0,
             alpha: 1
         )
+    }
+    
+    func setupCheckMarkView(_ checkMarkView: UIView, in cardView: UIView) {
+        
+     
+        checkMarkView.layer.cornerRadius = 12
+        checkMarkView.layer.borderWidth = 1.5
+        checkMarkView.layer.borderColor = UIColor(
+            red: 168.0 / 255.0,
+            green: 185.0 / 255.0,
+            blue: 154.0 / 255.0,
+            alpha: 1
+        ).cgColor
+        
+        checkMarkView.translatesAutoresizingMaskIntoConstraints = false
+        cardView.addSubview(checkMarkView)
+        
+        NSLayoutConstraint.activate([
+            checkMarkView.widthAnchor.constraint(equalToConstant: 24),
+            checkMarkView.heightAnchor.constraint(equalToConstant: 24),
+            checkMarkView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -16),
+            checkMarkView.centerYAnchor.constraint(equalTo: cardView.centerYAnchor)
+        ])
     }
     
     //MARK: - Actions
@@ -132,49 +178,30 @@ extension HabitsViewController: UITableViewDataSource {
         let cardView = UIView()
         cardView.accessibilityIdentifier = "habit-card"
         let checkMarkView = UIView()
+        let checkImageView = UIImageView()
+        checkImageView.image = UIImage(systemName: "checkmark")
+        checkImageView.tintColor = .white
+        checkImageView.contentMode = .scaleAspectFit
+        checkImageView.isHidden = true
+        checkMarkView.addSubview(checkImageView)
+        checkImageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            checkImageView.centerXAnchor.constraint(equalTo: checkMarkView.centerXAnchor),
+            checkImageView.centerYAnchor.constraint(equalTo: checkMarkView.centerYAnchor),
+            checkImageView.widthAnchor.constraint(equalToConstant: 12),
+            checkImageView.heightAnchor.constraint(equalToConstant: 12)
+        ])
+        setupCardView(cardView, in: cell.contentView)
+        setupCheckMarkView(checkMarkView, in: cardView)
         let tapGesture = UITapGestureRecognizer(
             target: self,
             action: #selector(checkMarkTapped(_:))
         )
+        
         checkMarkView.accessibilityIdentifier = "habit-checkmark-\(habit.id.uuidString)"
         checkMarkView.addGestureRecognizer(tapGesture)
         checkMarkView.isUserInteractionEnabled = true
-     
-        
-        cardView.backgroundColor = .white
-        cardView.layer.cornerRadius = 16
-        cardView.layer.masksToBounds = true
-        
-        cell.contentView.addSubview(cardView)
-        cell.contentView.sendSubviewToBack(cardView)
-        cardView.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            cardView.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: 16),
-            cardView.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -16),
-            cardView.topAnchor.constraint(equalTo: cell.contentView.topAnchor, constant: 6),
-            cardView.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor, constant: -6)
-            
-        ])
-        
-        checkMarkView.layer.cornerRadius = 12
-        checkMarkView.layer.borderWidth = 1.5
-        checkMarkView.layer.borderColor = UIColor(
-            red: 168.0 / 255.0,
-            green: 185.0 / 255.0,
-            blue: 154.0 / 255.0,
-            alpha: 1
-        ).cgColor
-        
-        cell.contentView.addSubview(checkMarkView)
-        checkMarkView.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            checkMarkView.widthAnchor.constraint(equalToConstant: 24),
-            checkMarkView.heightAnchor.constraint(equalToConstant: 24),
-            checkMarkView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -16),
-            checkMarkView.centerYAnchor.constraint(equalTo: cardView.centerYAnchor)
-        ])
         
         cell.textLabel?.text = habit.text
         cell.textLabel?.textColor = UIColor(
@@ -188,6 +215,7 @@ extension HabitsViewController: UITableViewDataSource {
         cell.accessoryType = .none
         
         if viewModel.isCompleted(habit: habit.id, date: Date()) {
+            checkImageView.isHidden = false
             checkMarkView.backgroundColor = UIColor(
                 red: 168.0 / 255.0,
                 green: 185.0 / 255.0,
@@ -195,6 +223,7 @@ extension HabitsViewController: UITableViewDataSource {
                 alpha: 1
             )
         } else {
+            checkImageView.isHidden = true
             checkMarkView.backgroundColor = .clear
         }
         
@@ -283,4 +312,6 @@ extension HabitsViewController {
         navigationItem.rightBarButtonItem = addButton
     }
 }
+
+
 
