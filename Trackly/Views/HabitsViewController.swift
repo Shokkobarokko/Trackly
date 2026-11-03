@@ -47,14 +47,7 @@ final class HabitsViewController: UIViewController {
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24)
         ])
-        
     }
-    
-    
-    
-    
-    
-    
 }
 
 //MARK: - Setup
@@ -83,8 +76,6 @@ private extension HabitsViewController {
             alpha: 1
         )
     }
-    
-    
     
     //MARK: - Actions
     @objc func addButtonTapped() {
@@ -139,8 +130,6 @@ extension HabitsViewController: UITableViewDataSource {
             
             cell.animateCheckmark(isCompleted: isCompleted)
         }
-        
-        
         return cell
     }
     
@@ -212,7 +201,6 @@ extension HabitsViewController: UITableViewDelegate {
 
 
 //MARK: NavigationBar
-
 
 extension HabitsViewController {
     func setupNavigationBar() {

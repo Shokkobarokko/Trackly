@@ -109,9 +109,32 @@ final class HabitCell: UITableViewCell {
         ])
     }
     
+    private func configureHabitLabel(isCompleted: Bool) {
+        let normalColor = UIColor(
+            red: 52.0 / 255.0,
+            green: 66.0 / 255.0,
+            blue: 54.0 / 255.0,
+            alpha: 1
+        )
+        
+        var attributes: [NSAttributedString.Key: Any] = [
+            .font: habitLabel.font,
+            .foregroundColor: isCompleted ? UIColor.gray : normalColor
+        ]
+        
+        if isCompleted {
+            attributes[.strikethroughStyle] = NSUnderlineStyle.single.rawValue
+        }
+        
+        habitLabel.attributedText = NSAttributedString(
+            string: habitLabel.text ?? "",
+            attributes: attributes
+        )
+    }
+    
     func configure(habit: Habit, isCompleted: Bool) {
         habitLabel.text = habit.text
-        
+        configureHabitLabel(isCompleted: isCompleted)
         checkMarkView.backgroundColor = isCompleted ? UIColor(
             red: 168.0 / 255.0,
             green: 185.0 / 255.0,
@@ -124,6 +147,7 @@ final class HabitCell: UITableViewCell {
     }
     
     func animateCheckmark(isCompleted: Bool) {
+        configureHabitLabel(isCompleted: isCompleted)
         let sageColor = UIColor(
             red: 168.0 / 255.0,
             green: 185.0 / 255.0,
@@ -155,4 +179,5 @@ final class HabitCell: UITableViewCell {
         onCheckmarkTapped?()
     }
 }
+
 
