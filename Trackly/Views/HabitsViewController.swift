@@ -21,6 +21,11 @@ final class HabitsViewController: UIViewController {
         viewModel.onHabitsChanged = { [weak self] in
             self?.tableView.reloadData()
         }
+        let editVC = EditHabitViewController(
+            habitText: "Читать 20 минут",
+            onSave: nil
+        )
+        present(editVC, animated: true)
     }
     
     private func setupUI() {
