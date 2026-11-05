@@ -50,5 +50,16 @@ final class EditHabitViewController: UIViewController {
             saveButton.widthAnchor.constraint(equalToConstant: 120),
             saveButton.heightAnchor.constraint(equalToConstant: 44)
         ])
+        
+        saveButton.addTarget(
+            self, action: #selector(saveButtonTapped), for: .touchUpInside
+        )
+    }
+    
+    @objc private func saveButtonTapped() {
+        let newText = textField.text
+        guard let newText = newText else { return }
+        onSave?(newText)
+        dismiss(animated: true)
     }
 }
