@@ -20,6 +20,9 @@ final class EditHabitViewController: UIViewController {
         super.viewDidLoad()
         setupTextField()
         setupSaveButton()
+        title = "Редактировать привычку"
+        view.backgroundColor = .systemBackground
+        navigationItem.prompt = "Изменение названия"
         
     }
     
