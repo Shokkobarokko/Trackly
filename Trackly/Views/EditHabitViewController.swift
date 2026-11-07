@@ -40,7 +40,7 @@ final class EditHabitViewController: UIViewController {
     }
     
     private func setupSaveButton() {
-        saveButton.setTitle("Save", for: .normal)
+        saveButton.setTitle("Сохранить", for: .normal)
         saveButton.backgroundColor = .systemGreen
         saveButton.setTitleColor(.white, for: .normal)
         
