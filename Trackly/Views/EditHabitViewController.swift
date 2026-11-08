@@ -28,6 +28,7 @@ final class EditHabitViewController: UIViewController {
     
     private func setupTextField() {
         textField.placeholder = "Название привычки"
+        textField.text = habitText
         textField.borderStyle = .roundedRect
         view.addSubview(textField)
         textField.translatesAutoresizingMaskIntoConstraints = false
