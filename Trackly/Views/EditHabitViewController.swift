@@ -63,6 +63,7 @@ final class EditHabitViewController: UIViewController {
     @objc private func saveButtonTapped() {
         let newText = textField.text
         guard let newText = newText else { return }
+        view.endEditing(true)
         onSave?(newText)
         dismiss(animated: true)
     }
