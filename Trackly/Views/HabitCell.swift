@@ -7,6 +7,7 @@ final class HabitCell: UITableViewCell {
     let checkImageView = UIImageView()
     let habitLabel = UILabel()
     var onCheckmarkTapped: (() -> Void)?
+    var onEditTapped: (() -> Void)?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -43,6 +44,13 @@ final class HabitCell: UITableViewCell {
             cardView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 6),
             cardView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -6)
         ])
+        
+        let longPress = UILongPressGestureRecognizer(
+            target: self,
+            action: #selector(cardLongPressed)
+        )
+        cardView.addGestureRecognizer(longPress)
+        cardView.isUserInteractionEnabled = true
     }
     
     private func setupCheckMarkView() {
@@ -172,6 +180,12 @@ final class HabitCell: UITableViewCell {
                 self.checkImageView.isHidden = true
                 self.checkImageView.transform = .identity
             })
+        }
+    }
+    
+    @objc private func cardLongPressed(_ gesture: UILongPressGestureRecognizer) {
+        if gesture.state == .began {
+            onEditTapped?()
         }
     }
     

@@ -21,11 +21,6 @@ final class HabitsViewController: UIViewController {
         viewModel.onHabitsChanged = { [weak self] in
             self?.tableView.reloadData()
         }
-        let editVC = EditHabitViewController(
-            habitText: "Читать 20 минут",
-            onSave: nil
-        )
-        present(editVC, animated: true)
     }
     
     private func setupUI() {
@@ -135,6 +130,17 @@ extension HabitsViewController: UITableViewDataSource {
             
             cell.animateCheckmark(isCompleted: isCompleted)
         }
+        
+        cell.onEditTapped = { [weak self] in guard let self = self else { return }
+            
+            let editVC = EditHabitViewController(
+                habitText: habit.text,
+                onSave: { [weak self] newText in
+                    self?.viewModel.updateHabit(at: indexPath.row, text: newText)
+                }
+            )
+            self.present(editVC, animated: true)
+        }
         return cell
     }
     
@@ -157,23 +163,23 @@ extension HabitsViewController: UITableViewDelegate {
         _ tableView: UITableView,
         didSelectRowAt indexPath: IndexPath
     ) {
-//        let habit = viewModel.habits[indexPath.row]
-//        let alert = UIAlertController(title:"Обновить", message: nil, preferredStyle: .alert)
-//        alert.addTextField { textField in
-//            textField.text = habit.text
-//        }
-//        let saveAction = UIAlertAction(
-//            title: "Сохранить",
-//            style: .default,
-//            handler: { action in
-//                if let text = alert.textFields?.first?.text {
-//                    self.viewModel.updateHabit(at: indexPath.row, text: text)
-//                }
-//            }
-//        )
-//        alert.addAction(saveAction)
-//        present(alert,animated: true)
-//        tableView.deselectRow(at: indexPath, animated: true)
+        //        let habit = viewModel.habits[indexPath.row]
+        //        let alert = UIAlertController(title:"Обновить", message: nil, preferredStyle: .alert)
+        //        alert.addTextField { textField in
+        //            textField.text = habit.text
+        //        }
+        //        let saveAction = UIAlertAction(
+        //            title: "Сохранить",
+        //            style: .default,
+        //            handler: { action in
+        //                if let text = alert.textFields?.first?.text {
+        //                    self.viewModel.updateHabit(at: indexPath.row, text: text)
+        //                }
+        //            }
+        //        )
+        //        alert.addAction(saveAction)
+        //        present(alert,animated: true)
+        //        tableView.deselectRow(at: indexPath, animated: true)
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -182,29 +188,15 @@ extension HabitsViewController: UITableViewDelegate {
         accessoryButtonTappedForRowWith indexPath: IndexPath
     ) {
         let habit = viewModel.habits[indexPath.row]
-        let alert = UIAlertController(
-            title: "Обновить",
-            message: nil,
-            preferredStyle: .alert
-        )
-        alert.addTextField { textField in
-            textField.text = habit.text
-        }
-        let saveAction = UIAlertAction(
-            title: "Сохранить",
-            style: .default,
-            handler: { action in
-                if let text = alert.textFields?.first?.text {
-                    self.viewModel.updateHabit(at: indexPath.row, text: text)
-                }
+        let editVC = EditHabitViewController(
+            habitText: habit.text, onSave: {
+                [weak self] newText in self?.viewModel.updateHabit(at: indexPath.row, text: newText)
             }
         )
-        alert.addAction(saveAction)
-        present(alert, animated: true)
+        present(editVC, animated: true)
     }
+    
 }
-
-
 //MARK: NavigationBar
 
 extension HabitsViewController {
