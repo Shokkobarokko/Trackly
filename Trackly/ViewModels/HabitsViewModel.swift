@@ -53,6 +53,13 @@ extension HabitsViewModel {
         onHabitsChanged?()
     }
     
+    func updateHabit(id: UUID, text: String) {
+        guard let index = habits.firstIndex(where: { $0.id == id}) else {
+            return
+        }
+        updateHabit(at: index, text: text)
+    }
+    
     func isCompleted(habit: UUID, date: Date) -> Bool {
         return completions.contains { completion in
             completion.habitID == habit && completion.date == Calendar.current.startOfDay(for: date)

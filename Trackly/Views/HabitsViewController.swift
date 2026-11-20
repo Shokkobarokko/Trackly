@@ -136,7 +136,7 @@ extension HabitsViewController: UITableViewDataSource {
             let editVC = EditHabitViewController(
                 habitText: habit.text,
                 onSave: { [weak self] newText in
-                    self?.viewModel.updateHabit(at: indexPath.row, text: newText)
+                    self?.viewModel.updateHabit(id: habit.id, text: newText)
                 }
             )
             self.present(editVC, animated: true)
