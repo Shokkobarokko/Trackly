@@ -117,4 +117,16 @@ struct TracklyTests {
         let habit = habitsViewModel.habits.first(where: { $0.id == habitID})
         #expect(habit?.text == "Read every day")
     }
+    
+    @Test func updateHabitWithUnknownIDDoesNothing() {
+        let viewModel = HabitsViewModel()
+        viewModel.addHabit(text: "Читать")
+        
+        let originalText = viewModel.habits[0].text
+        let unknownID = UUID()
+        
+        viewModel.updateHabit(id: unknownID, text: "Новое название")
+        
+        #expect(viewModel.habits[0].text == originalText)
+    }
 }
