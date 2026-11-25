@@ -139,7 +139,8 @@ extension HabitsViewController: UITableViewDataSource {
                     self?.viewModel.updateHabit(id: habit.id, text: newText)
                 }
             )
-            self.present(editVC, animated: true)
+            let navigationController = UINavigationController(rootViewController: editVC)
+            self.present(navigationController, animated: true)
         }
         return cell
     }

@@ -18,11 +18,15 @@ final class EditHabitViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupTextField()
         setupSaveButton()
+        setupCloseButton()
+        
         title = "Редактировать привычку"
         view.backgroundColor = .systemBackground
         navigationItem.prompt = "Изменение названия"
+        textField.becomeFirstResponder()
         
     }
     
@@ -58,6 +62,20 @@ final class EditHabitViewController: UIViewController {
         saveButton.addTarget(
             self, action: #selector(saveButtonTapped), for: .touchUpInside
         )
+    }
+    
+    private func setupCloseButton() {
+        let closeButton = UIBarButtonItem(
+            barButtonSystemItem: .close,
+            target: self,
+            action: #selector(closeButtonTapped)
+        )
+        
+        navigationItem.leftBarButtonItem = closeButton
+    }
+    
+    @objc private func closeButtonTapped() {
+        dismiss(animated: true)
     }
     
     @objc private func saveButtonTapped() {

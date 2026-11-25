@@ -11,9 +11,6 @@ enum HabitsStorage {
         } catch {
             print(error)
         }
-        
-        
-
     }
     
     static func load() -> [Habit] {
