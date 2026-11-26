@@ -109,6 +109,8 @@ final class HabitCell: UITableViewCell {
         )
         cardView.addSubview(habitLabel)
         habitLabel.translatesAutoresizingMaskIntoConstraints = false
+        habitLabel.numberOfLines = 1
+        habitLabel.lineBreakMode = .byTruncatingTail
         
         NSLayoutConstraint.activate([
             habitLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 16),
