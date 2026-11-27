@@ -8,6 +8,7 @@ final class HabitsViewController: UIViewController {
     private let viewModel = HabitsViewModel()
     private let tableView = UITableView()
     private let titleLabel = UILabel()
+    private let emptyStateLabel = UILabel()
     
     //MARK: - Lifecycle
     
@@ -17,9 +18,12 @@ final class HabitsViewController: UIViewController {
         setupUI()
         setupTitle()
         setupTableView()
+        setupEmptyStateLabel()
         setupNavigationBar()
+        updateEmptyState()
         viewModel.onHabitsChanged = { [weak self] in
             self?.tableView.reloadData()
+            self?.updateEmptyState()
         }
     }
     
@@ -75,6 +79,28 @@ private extension HabitsViewController {
             blue: 242.0 / 255.0,
             alpha: 1
         )
+    }
+    
+    func setupEmptyStateLabel() {
+        emptyStateLabel.text = "Пока нет привычек. \nНажмите 'Добавить', чтобы добавить первую!"
+        emptyStateLabel.textColor = .secondaryLabel
+        emptyStateLabel.font = .systemFont(ofSize: 16)
+        emptyStateLabel.textAlignment = .center
+        emptyStateLabel.numberOfLines = 0
+        
+        view.addSubview(emptyStateLabel)
+        emptyStateLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            emptyStateLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyStateLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            emptyStateLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
+            emptyStateLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32)
+        ])
+    }
+    
+    func updateEmptyState() {
+        emptyStateLabel.isHidden = !viewModel.habits.isEmpty
     }
     
     //MARK: - Actions
